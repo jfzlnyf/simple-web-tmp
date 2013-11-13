@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -20,11 +21,23 @@ import java.io.InputStreamReader;
 @Service
 public class DishService {
 
+    @Value("${kjt.dish.list}")
+    String listUrl;
+
+    @Value("${kjt.dish.edit}")
+    String editUrl;
+
+    @Value("${kjt.dish.add}")
+    String addUrl;
+
+    @Value("${kjt.dish.delete}")
+    String deleteUrl;
+
     public String getDishList(String token,String restaurantId,String categoryId){
         String content = null;
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            String url="http://74.94.3.210/KJTRest/api/restaurant/${restaurantId}/menu/dishes/cid/${categoryId}"
+            String url="listUrl"
                     .replace("${restaurantId}",restaurantId)
                     .replace("${categoryId}",categoryId);
             HttpGet httpget2 = new HttpGet(url);

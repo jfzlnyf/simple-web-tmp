@@ -4,6 +4,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -19,11 +20,22 @@ import java.io.InputStreamReader;
  */
 @Service
 public class RestaurantService {
+
+    @Value("${kjt.restaurant.list}")
+    String listUrl;
+
+    @Value("${kjt.restaurant.edit}")
+    String editUrl;
+
+    @Value("${kjt.restaurant.clone}")
+    String cloneUrl;
+
+
     public String getRestaurantList(String token) {
         String content = null;
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            HttpGet httpget2 = new HttpGet("http://74.94.3.210/KJTRest/api/restaurants");
+            HttpGet httpget2 = new HttpGet(listUrl);
             httpget2.addHeader("WSToken",token);
             HttpResponse response2 = httpclient.execute(httpget2);
             if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){

@@ -1,10 +1,14 @@
 package com.snda.sysdev.gplusshop.web.service;
 
-import org.apache.http.*;
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -22,11 +26,14 @@ import java.util.List;
 @Service
 public class LoginService {
 
+    @Value("${kjt.login}")
+    String loginUrl;
+
     public String doLogin(String username, String password, HttpSession session) {
         String token=null;
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            HttpPost httpPost = new HttpPost("http://74.94.3.210/KJTRest/api/token");
+            HttpPost httpPost = new HttpPost(loginUrl);
             httpPost.getParams().setParameter("http.protocol.content-charset", "UTF-8");
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(new BasicNameValuePair("username",username));
