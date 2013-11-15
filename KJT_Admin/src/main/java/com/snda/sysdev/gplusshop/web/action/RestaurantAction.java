@@ -1,10 +1,6 @@
 package com.snda.sysdev.gplusshop.web.action;
 
-import com.snda.sysdev.gplusshop.web.model.ReturnBean;
 import com.snda.sysdev.gplusshop.web.service.RestaurantService;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,5 +29,13 @@ public class RestaurantAction {
     ){
         String retVal=restaurantService.getRestaurantList(LoginAction.getToken(session));
         return retVal;
+    }
+
+    @RequestMapping(value = "/add")
+    @ResponseBody
+    public String addRestaurant(
+         String addJson
+    ){
+
     }
 }
