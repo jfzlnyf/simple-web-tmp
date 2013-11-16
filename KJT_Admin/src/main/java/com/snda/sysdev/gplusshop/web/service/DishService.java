@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,8 +46,8 @@ public class DishService {
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             String url="listUrl"
-                    .replace("${restaurantId}",restaurantId)
-                    .replace("${categoryId}",categoryId);
+                    .replace("{restaurantId}",restaurantId)
+                    .replace("{categoryId}",categoryId);
             HttpGet httpget2 = new HttpGet(url);
             httpget2.addHeader("WSToken",token);
             HttpResponse response2 = httpclient.execute(httpget2);
@@ -69,16 +70,17 @@ public class DishService {
         return content;
     }
 
-    public String editSingleCategory(String token,String restaurantId,String categoryId,JSONObject singleCategory){
+    public String editSingleDish(String token,String restaurantId,String categoryId,String dishId,JSONObject singleDish){
         String content = null;
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             String url=editUrl
-                    .replace("${restaurantId}", restaurantId)
-                    .replace("${categoryId}", categoryId);
+                    .replace("{restaurantId}", restaurantId)
+                    .replace("{categoryId}", categoryId)
+                    .replace("{dishId}", dishId);
             HttpPut httpget2 = new HttpPut(url);
             httpget2.addHeader("WSToken",token);
-            StringEntity reqEntity = new StringEntity(singleCategory.toString(),"UTF-8");
+            StringEntity reqEntity = new StringEntity(singleDish.toString(),"UTF-8");
             httpget2.setEntity(reqEntity);
             HttpResponse response2 = httpclient.execute(httpget2);
             if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
@@ -100,13 +102,14 @@ public class DishService {
         return content;
     }
 
-    public String deleteSingleCategory(String token,String restaurantId,String categoryId){
+    public String deleteSingleDish(String token,String restaurantId,String categoryId,String dishId){
         String content = null;
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             String url=deleteUrl
-                    .replace("${restaurantId}", restaurantId)
-                    .replace("${categoryId}", categoryId);
+                    .replace("{restaurantId}", restaurantId)
+                    .replace("{categoryId}", categoryId)
+                    .replace("{dishId}", dishId);
             HttpDelete httpget2 = new HttpDelete(url);
             httpget2.addHeader("WSToken",token);
             HttpResponse response2 = httpclient.execute(httpget2);
@@ -129,15 +132,26 @@ public class DishService {
         return content;
     }
 
-    public ReturnBean editCategories(String token,String restaurantId,JSONArray categoryArray){
-        if(CollectionUtils.isNotEmpty(categoryArray)){
-            for (Object tmp : categoryArray) {
-                JSONObject categoryJson=(JSONObject)tmp;
-                String categoryId=categoryJson.optString("categoryId");
-                categoryJson.remove("categoryId");
-                editSingleCategory(token,restaurantId,categoryId,categoryJson);
+
+    public ReturnBean editDishes(String token,String restaurantId,String categoryId,JSONArray dishArray){
+        if(CollectionUtils.isNotEmpty(dishArray)){
+            for (Object tmp : dishArray) {
+                JSONObject dishJson=(JSONObject)tmp;
+                String dishId=dishJson.optString("dishId");
+                dishJson.remove("dishId");
+                editSingleDish(token, restaurantId, categoryId, dishId, dishJson);
             }
         }
         return new ReturnBean(true,"");
     }
+
+    public ReturnBean deleteDishes(String token,String restaurantId,String categoryId,List<String> dishIds){
+        if(CollectionUtils.isNotEmpty(dishIds)){
+            for (String dishId : dishIds) {
+                deleteSingleDish(token,restaurantId,categoryId,dishId);
+            }
+        }
+        return new ReturnBean(true,"");
+    }
+
 }

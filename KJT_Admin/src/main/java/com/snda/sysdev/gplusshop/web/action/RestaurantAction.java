@@ -31,11 +31,5 @@ public class RestaurantAction {
         return retVal;
     }
 
-    @RequestMapping(value = "/add")
-    @ResponseBody
-    public String addRestaurant(
-         String addJson
-    ){
 
-    }
 }

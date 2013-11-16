@@ -46,6 +46,8 @@ public class LoginService {
                 if(headers!=null && headers.length>0){
                     token=headers[0].getValue();
                     session.setAttribute("token",token);
+                    session.setAttribute("password",password);
+                    session.setAttribute("username",username);
                 }
             }
         } catch (IOException e) {

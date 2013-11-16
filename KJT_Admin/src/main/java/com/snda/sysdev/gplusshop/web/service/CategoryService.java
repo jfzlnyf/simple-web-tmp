@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -45,7 +46,7 @@ public class CategoryService {
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             String url=listUrl
-                    .replace("${restaurantId}", restaurantId);
+                    .replace("{restaurantId}", restaurantId);
             HttpGet httpget2 = new HttpGet(url);
             httpget2.addHeader("WSToken",token);
             HttpResponse response2 = httpclient.execute(httpget2);
@@ -73,14 +74,16 @@ public class CategoryService {
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             String url=editUrl
-                    .replace("${restaurantId}", restaurantId)
-                    .replace("${categoryId}", categoryId);
+                    .replace("{restaurantId}", restaurantId)
+                    .replace("{categoryId}", categoryId);
             HttpPut httpget2 = new HttpPut(url);
             httpget2.addHeader("WSToken",token);
+            httpget2.addHeader("Content-Type","application/json");
             StringEntity reqEntity = new StringEntity(singleCategory.toString(),"UTF-8");
             httpget2.setEntity(reqEntity);
             HttpResponse response2 = httpclient.execute(httpget2);
-            if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+            //todo
+            if(true){
                 BufferedReader in = null;
                 in = new BufferedReader(new InputStreamReader(response2.getEntity()
                         .getContent()));
@@ -96,6 +99,7 @@ public class CategoryService {
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        System.out.println(content);
         return content;
     }
 
@@ -104,8 +108,8 @@ public class CategoryService {
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             String url=deleteUrl
-                    .replace("${restaurantId}", restaurantId)
-                    .replace("${categoryId}", categoryId);
+                    .replace("{restaurantId}", restaurantId)
+                    .replace("{categoryId}", categoryId);
             HttpDelete httpget2 = new HttpDelete(url);
             httpget2.addHeader("WSToken",token);
             HttpResponse response2 = httpclient.execute(httpget2);
@@ -139,4 +143,14 @@ public class CategoryService {
         }
         return new ReturnBean(true,"");
     }
+
+    public ReturnBean deleteCategories(String token,String restaurantId,List<String> categoryIds){
+        if(CollectionUtils.isNotEmpty(categoryIds)){
+            for (String categoryId : categoryIds) {
+                deleteSingleCategory(token,restaurantId,categoryId);
+            }
+        }
+        return new ReturnBean(true,"");
+    }
+
 }
