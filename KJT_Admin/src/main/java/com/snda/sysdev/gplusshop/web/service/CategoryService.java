@@ -4,10 +4,12 @@ import com.snda.sysdev.gplusshop.web.model.ReturnBean;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -83,7 +85,7 @@ public class CategoryService {
             httpget2.setEntity(reqEntity);
             HttpResponse response2 = httpclient.execute(httpget2);
             //todo
-            if(true){
+            if(response2.getStatusLine().getStatusCode()==HttpStatus.SC_OK){
                 BufferedReader in = null;
                 in = new BufferedReader(new InputStreamReader(response2.getEntity()
                         .getContent()));
@@ -110,9 +112,9 @@ public class CategoryService {
             String url=deleteUrl
                     .replace("{restaurantId}", restaurantId)
                     .replace("{categoryId}", categoryId);
-            HttpDelete httpget2 = new HttpDelete(url);
-            httpget2.addHeader("WSToken",token);
-            HttpResponse response2 = httpclient.execute(httpget2);
+            HttpDelete deleteRequest = new HttpDelete(url);
+            deleteRequest.addHeader("WSToken", token);
+            HttpResponse response2 = httpclient.execute(deleteRequest);
             if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
                 BufferedReader in = null;
                 in = new BufferedReader(new InputStreamReader(response2.getEntity()
@@ -132,14 +134,22 @@ public class CategoryService {
         return content;
     }
 
-    public ReturnBean editCategories(String token,String restaurantId,JSONArray categoryArray){
+    public ReturnBean mergeCategories(String token, String restaurantId, JSONArray categoryArray){
         if(CollectionUtils.isNotEmpty(categoryArray)){
             for (Object tmp : categoryArray) {
                 JSONObject categoryJson=(JSONObject)tmp;
                 String categoryId=categoryJson.optString("categoryId");
-                categoryJson.remove("categoryId");
-                editSingleCategory(token,restaurantId,categoryId,categoryJson);
+                if(StringUtils.isNotEmpty(categoryId)){
+                    //edit
+                    categoryJson.remove("categoryId");
+                    editSingleCategory(token,restaurantId,categoryId,categoryJson);
+                }else{
+                    //add
+                    categoryJson.put("rid",restaurantId);
+                    addSingleCategory(token, restaurantId, categoryJson);
+                }
             }
+
         }
         return new ReturnBean(true,"");
     }
@@ -151,6 +161,43 @@ public class CategoryService {
             }
         }
         return new ReturnBean(true,"");
+    }
+
+    public String addSingleCategory(String token,String restaurantId,JSONObject singleCategory){
+        String content = null;
+        try {
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            String url=addUrl
+                    .replace("{restaurantId}", restaurantId);
+            HttpPost addRequest = new HttpPost(url);
+            addRequest.addHeader("WSToken", token);
+            addRequest.addHeader("Content-Type", "application/json");
+            JSONObject allInfo=new JSONObject();
+            JSONArray list=new JSONArray();
+            list.add(singleCategory);
+            allInfo.put("categories",list);
+            StringEntity reqEntity = new StringEntity(allInfo.toString(),"UTF-8");
+            addRequest.setEntity(reqEntity);
+            HttpResponse response2 = httpclient.execute(addRequest);
+            //todo
+            if(true){
+                BufferedReader in = null;
+                in = new BufferedReader(new InputStreamReader(response2.getEntity()
+                        .getContent()));
+                StringBuffer sb = new StringBuffer("");
+                String line;
+                String NL = System.getProperty("line.separator");
+                while ((line = in.readLine()) != null) {
+                    sb.append(line + NL);
+                }
+                in.close();
+                content = sb.toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        System.out.println(content);
+        return content;
     }
 
 }

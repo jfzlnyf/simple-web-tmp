@@ -42,7 +42,7 @@ public class CategoryAction {
             @RequestParam(value = "categoryJson") String categoryJson
 
     ){
-        return categoryService.editCategories(LoginAction.getToken(session), restaurantId, JSONArray.fromObject(categoryJson)).toString();
+        return categoryService.mergeCategories(LoginAction.getToken(session), restaurantId, JSONArray.fromObject(categoryJson)).toString();
     }
 
 

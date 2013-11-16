@@ -1,5 +1,7 @@
 package com.snda.sysdev.gplusshop.web.service;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
@@ -23,6 +25,10 @@ public class RestaurantService {
 
     @Value("${kjt.restaurant.list}")
     String listUrl;
+
+    @Value("${kjt.restaurant.info}")
+    String infoUrl;
+
 
     @Value("${kjt.restaurant.edit}")
     String editUrl;
@@ -51,9 +57,51 @@ public class RestaurantService {
                 in.close();
                 content = sb.toString();
             }
+            JSONObject listJson=JSONObject.fromObject(content);
+            if(listJson!=null){
+                JSONArray listJsonArray=listJson.optJSONArray("restaurants");
+                for (Object o : listJsonArray) {
+                    JSONObject baseInfo=(JSONObject)o;
+                    String restaurantId=baseInfo.optString("rid");
+                    JSONObject extraInfo=getSingleRestaurant(token,restaurantId);
+                    if(extraInfo!=null){
+                        baseInfo.putAll(extraInfo);
+                    }
+                }
+                return listJson.toString();
+            }
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
         return content;
+    }
+
+    public JSONObject getSingleRestaurant(String token, String restaurantId) {
+        String content = null;
+        try {
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            String url=infoUrl.replace("{restaurantId}",restaurantId);
+            HttpGet httpget2 = new HttpGet(url);
+            httpget2.addHeader("WSToken",token);
+            HttpResponse response2 = httpclient.execute(httpget2);
+            if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+                BufferedReader in = null;
+                in = new BufferedReader(new InputStreamReader(response2.getEntity()
+                        .getContent()));
+                StringBuffer sb = new StringBuffer("");
+                String line;
+                String NL = System.getProperty("line.separator");
+                while ((line = in.readLine()) != null) {
+                    sb.append(line + NL);
+                }
+                in.close();
+                content = sb.toString();
+            }
+            JSONObject extraJson=JSONObject.fromObject(content);
+            return extraJson;
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return null;
     }
 }
