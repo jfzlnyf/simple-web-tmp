@@ -138,10 +138,10 @@ public class CategoryService {
         if(CollectionUtils.isNotEmpty(categoryArray)){
             for (Object tmp : categoryArray) {
                 JSONObject categoryJson=(JSONObject)tmp;
-                String categoryId=categoryJson.optString("categoryId");
+                String categoryId=categoryJson.optString("cid");
                 if(StringUtils.isNotEmpty(categoryId)){
                     //edit
-                    categoryJson.remove("categoryId");
+                    categoryJson.remove("cid");
                     editSingleCategory(token,restaurantId,categoryId,categoryJson);
                 }else{
                     //add

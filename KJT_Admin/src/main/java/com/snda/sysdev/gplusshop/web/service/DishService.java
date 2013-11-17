@@ -4,10 +4,12 @@ import com.snda.sysdev.gplusshop.web.model.ReturnBean;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -78,11 +80,12 @@ public class DishService {
                     .replace("{restaurantId}", restaurantId)
                     .replace("{categoryId}", categoryId)
                     .replace("{dishId}", dishId);
-            HttpPut httpget2 = new HttpPut(url);
-            httpget2.addHeader("WSToken",token);
+            HttpPut editRequest = new HttpPut(url);
+            editRequest.addHeader("WSToken", token);
+            editRequest.addHeader("Content-Type", "application/json");
             StringEntity reqEntity = new StringEntity(singleDish.toString(),"UTF-8");
-            httpget2.setEntity(reqEntity);
-            HttpResponse response2 = httpclient.execute(httpget2);
+            editRequest.setEntity(reqEntity);
+            HttpResponse response2 = httpclient.execute(editRequest);
             if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
                 BufferedReader in = null;
                 in = new BufferedReader(new InputStreamReader(response2.getEntity()
@@ -145,6 +148,27 @@ public class DishService {
         return new ReturnBean(true,"");
     }
 
+    public ReturnBean mergeDishes(String token,String restaurantId,String categoryId,JSONArray dishArray){
+        if(CollectionUtils.isNotEmpty(dishArray)){
+            for (Object tmp : dishArray) {
+                JSONObject dishJson=(JSONObject)tmp;
+                String dishId=dishJson.optString("did");
+                if(StringUtils.isNotEmpty(dishId)){
+                    //edit
+                    dishJson.remove("did");
+                    editSingleDish(token, restaurantId, categoryId, dishId, dishJson);
+                }else{
+                    //add
+                    dishJson.put("rid",restaurantId);
+                    dishJson.put("cid",categoryId);
+                    addSingleDish(token, restaurantId, categoryId, dishJson);
+                }
+            }
+
+        }
+        return new ReturnBean(true,"");
+    }
+
     public ReturnBean deleteDishes(String token,String restaurantId,String categoryId,List<String> dishIds){
         if(CollectionUtils.isNotEmpty(dishIds)){
             for (String dishId : dishIds) {
@@ -153,5 +177,44 @@ public class DishService {
         }
         return new ReturnBean(true,"");
     }
+
+    public String addSingleDish(String token,String restaurantId, String categoryId,JSONObject dishJson){
+        String content = null;
+        try {
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            String url=addUrl
+                    .replace("{restaurantId}", restaurantId)
+                    .replace("{categoryId}", categoryId);
+            HttpPost addRequest = new HttpPost(url);
+            addRequest.addHeader("WSToken", token);
+            addRequest.addHeader("Content-Type", "application/json");
+            JSONObject allInfo=new JSONObject();
+            JSONArray list=new JSONArray();
+            list.add(dishJson);
+            allInfo.put("dishes",list);
+            StringEntity reqEntity = new StringEntity(allInfo.toString(),"UTF-8");
+            addRequest.setEntity(reqEntity);
+            HttpResponse response2 = httpclient.execute(addRequest);
+            //todo
+            if(true){
+                BufferedReader in = null;
+                in = new BufferedReader(new InputStreamReader(response2.getEntity()
+                        .getContent()));
+                StringBuffer sb = new StringBuffer("");
+                String line;
+                String NL = System.getProperty("line.separator");
+                while ((line = in.readLine()) != null) {
+                    sb.append(line + NL);
+                }
+                in.close();
+                content = sb.toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        System.out.println(content);
+        return content;
+    }
+
 
 }

@@ -2,7 +2,9 @@ package com.snda.sysdev.gplusshop.web.action;
 
 import com.snda.sysdev.gplusshop.web.service.CategoryService;
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,9 +36,9 @@ public class CategoryAction {
           return categoryService.getCategoryList(LoginAction.getToken(session),restaurantId);
     }
 
-    @RequestMapping(value = "/edit")
+    @RequestMapping(value = "/edit2")
     @ResponseBody
-    public String editCategories(
+    public String editCategories2(
             HttpSession session,
             @RequestParam(value = "restaurantId") String restaurantId,
             @RequestParam(value = "categoryJson") String categoryJson
@@ -44,6 +46,29 @@ public class CategoryAction {
     ){
         return categoryService.mergeCategories(LoginAction.getToken(session), restaurantId, JSONArray.fromObject(categoryJson)).toString();
     }
+
+
+    @RequestMapping(value = "/edit")
+    @ResponseBody
+    public String editCategories(
+            HttpSession session,
+            @RequestParam(value = "restaurantId") String restaurantId,
+            @RequestBody String categoryJson
+
+    ){
+        JSONArray editArray=new JSONArray();
+        if(categoryJson.startsWith("[")){
+            //array
+            editArray=JSONArray.fromObject(categoryJson);
+        }else if(categoryJson.startsWith("{")){
+            //object
+            JSONObject editSingle=JSONObject.fromObject(categoryJson);
+            editArray.add(editSingle);
+        }
+        return categoryService.mergeCategories(LoginAction.getToken(session), restaurantId, editArray).toString();
+    }
+
+
 
 
     @RequestMapping(value = "/delete")
