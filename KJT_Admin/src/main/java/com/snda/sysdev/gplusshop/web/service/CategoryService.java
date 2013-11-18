@@ -43,18 +43,18 @@ public class CategoryService {
     @Value("${kjt.category.delete}")
     String deleteUrl;
 
-    public String getCategoryList(String token,String restaurantId){
-        String content = null;
+    public JSONArray getCategoryList(String token,String restaurantId){
+        JSONArray listJsonArray=new JSONArray();
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             String url=listUrl
                     .replace("{restaurantId}", restaurantId);
-            HttpGet httpget2 = new HttpGet(url);
-            httpget2.addHeader("WSToken",token);
-            HttpResponse response2 = httpclient.execute(httpget2);
-            if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+            HttpGet listRequest = new HttpGet(url);
+            listRequest.addHeader("WSToken", token);
+            HttpResponse listResponse = httpclient.execute(listRequest);
+            if(listResponse.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
                 BufferedReader in = null;
-                in = new BufferedReader(new InputStreamReader(response2.getEntity()
+                in = new BufferedReader(new InputStreamReader(listResponse.getEntity()
                         .getContent()));
                 StringBuffer sb = new StringBuffer("");
                 String line;
@@ -63,12 +63,22 @@ public class CategoryService {
                     sb.append(line + NL);
                 }
                 in.close();
-                content = sb.toString();
+                JSONObject  ret=JSONObject.fromObject(sb.toString());
+                if(ret.containsKey("categories")){
+                    listJsonArray=ret.optJSONArray("categories");
+                    if(CollectionUtils.isNotEmpty(listJsonArray)){
+                        for (Object tmp : listJsonArray) {
+                            JSONObject categoryInfo=(JSONObject)tmp;
+                            categoryInfo.put("rid",restaurantId);
+                        }
+                    }
+                }
+
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return content;
+        return listJsonArray;
     }
 
     public String editSingleCategory(String token,String restaurantId,String categoryId,JSONObject singleCategory){
@@ -134,14 +144,18 @@ public class CategoryService {
         return content;
     }
 
-    public ReturnBean mergeCategories(String token, String restaurantId, JSONArray categoryArray){
+    public ReturnBean mergeCategories(String token, JSONArray categoryArray){
         if(CollectionUtils.isNotEmpty(categoryArray)){
             for (Object tmp : categoryArray) {
                 JSONObject categoryJson=(JSONObject)tmp;
                 String categoryId=categoryJson.optString("cid");
+                String restaurantId=categoryJson.optString("rid");
+                //clean cid from frontend
+                categoryJson.remove("cid");
                 if(StringUtils.isNotEmpty(categoryId)){
                     //edit
-                    categoryJson.remove("cid");
+                    //need to clean
+                    categoryJson.remove("rid");
                     editSingleCategory(token,restaurantId,categoryId,categoryJson);
                 }else{
                     //add
@@ -157,7 +171,7 @@ public class CategoryService {
     public ReturnBean deleteCategories(String token,String restaurantId,List<String> categoryIds){
         if(CollectionUtils.isNotEmpty(categoryIds)){
             for (String categoryId : categoryIds) {
-                deleteSingleCategory(token,restaurantId,categoryId);
+                deleteSingleCategory(token, restaurantId, categoryId);
             }
         }
         return new ReturnBean(true,"");

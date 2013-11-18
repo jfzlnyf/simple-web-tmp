@@ -37,8 +37,9 @@ public class RestaurantService {
     String cloneUrl;
 
 
-    public String getRestaurantList(String token) {
+    public JSONArray getRestaurantList(String token) {
         String content = null;
+        JSONArray listJsonArray=new JSONArray();
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpGet httpget2 = new HttpGet(listUrl);
@@ -59,7 +60,7 @@ public class RestaurantService {
             }
             JSONObject listJson=JSONObject.fromObject(content);
             if(listJson!=null){
-                JSONArray listJsonArray=listJson.optJSONArray("restaurants");
+                listJsonArray=listJson.optJSONArray("restaurants");
                 for (Object o : listJsonArray) {
                     JSONObject baseInfo=(JSONObject)o;
                     String restaurantId=baseInfo.optString("rid");
@@ -68,12 +69,12 @@ public class RestaurantService {
                         baseInfo.putAll(extraInfo);
                     }
                 }
-                return listJson.toString();
+                return listJsonArray;
             }
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return content;
+        return listJsonArray;
     }
 
     public JSONObject getSingleRestaurant(String token, String restaurantId) {

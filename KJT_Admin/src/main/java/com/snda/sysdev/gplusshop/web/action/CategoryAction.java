@@ -1,5 +1,6 @@
 package com.snda.sysdev.gplusshop.web.action;
 
+import com.snda.sysdev.gplusshop.web.model.ReturnBean;
 import com.snda.sysdev.gplusshop.web.service.CategoryService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -31,28 +32,19 @@ public class CategoryAction {
     @ResponseBody
     public String getCategoryList(
             HttpSession session,
-            @RequestParam(value = "restaurantId") String restaurantId
+            @RequestParam(value = "restaurant") String restaurantId
     ){
-          return categoryService.getCategoryList(LoginAction.getToken(session),restaurantId);
+        JSONArray  retArray=categoryService.getCategoryList(LoginAction.getToken(session),restaurantId);
+        return JSONObject.fromObject(new ReturnBean(true,"success",retArray)).toString();
     }
 
-    @RequestMapping(value = "/edit2")
-    @ResponseBody
-    public String editCategories2(
-            HttpSession session,
-            @RequestParam(value = "restaurantId") String restaurantId,
-            @RequestParam(value = "categoryJson") String categoryJson
 
-    ){
-        return categoryService.mergeCategories(LoginAction.getToken(session), restaurantId, JSONArray.fromObject(categoryJson)).toString();
-    }
 
 
     @RequestMapping(value = "/edit")
     @ResponseBody
     public String editCategories(
             HttpSession session,
-            @RequestParam(value = "restaurantId") String restaurantId,
             @RequestBody String categoryJson
 
     ){
@@ -65,7 +57,7 @@ public class CategoryAction {
             JSONObject editSingle=JSONObject.fromObject(categoryJson);
             editArray.add(editSingle);
         }
-        return categoryService.mergeCategories(LoginAction.getToken(session), restaurantId, editArray).toString();
+        return categoryService.mergeCategories(LoginAction.getToken(session), editArray).toString();
     }
 
 

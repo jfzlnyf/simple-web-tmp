@@ -1,6 +1,9 @@
 package com.snda.sysdev.gplusshop.web.action;
 
+import com.snda.sysdev.gplusshop.web.model.ReturnBean;
 import com.snda.sysdev.gplusshop.web.service.RestaurantService;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -27,8 +30,8 @@ public class RestaurantAction {
     public String getRestaurantList(
             HttpSession session
     ){
-        String retVal=restaurantService.getRestaurantList(LoginAction.getToken(session));
-        return retVal;
+        JSONArray  retArray=restaurantService.getRestaurantList(LoginAction.getToken(session));
+        return JSONObject.fromObject(new ReturnBean(true,"success",retArray)).toString();
     }
 
 

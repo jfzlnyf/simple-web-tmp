@@ -43,16 +43,16 @@ public class DishService {
     @Value("${kjt.dish.delete}")
     String deleteUrl;
 
-    public String getDishList(String token,String restaurantId,String categoryId){
-        String content = null;
+    public JSONArray getDishList(String token,String restaurantId,String categoryId){
+        JSONArray listJsonArray=new JSONArray();
         try {
             DefaultHttpClient httpclient = new DefaultHttpClient();
-            String url="listUrl"
+            String url=listUrl
                     .replace("{restaurantId}",restaurantId)
                     .replace("{categoryId}",categoryId);
-            HttpGet httpget2 = new HttpGet(url);
-            httpget2.addHeader("WSToken",token);
-            HttpResponse response2 = httpclient.execute(httpget2);
+            HttpGet listRequest = new HttpGet(url);
+            listRequest.addHeader("WSToken", token);
+            HttpResponse response2 = httpclient.execute(listRequest);
             if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
                 BufferedReader in = null;
                 in = new BufferedReader(new InputStreamReader(response2.getEntity()
@@ -64,12 +64,22 @@ public class DishService {
                     sb.append(line + NL);
                 }
                 in.close();
-                content = sb.toString();
+                JSONObject ret=JSONObject.fromObject(sb.toString());
+                if(ret.containsKey("dishes")){
+                    listJsonArray=ret.optJSONArray("dishes");
+                    if(CollectionUtils.isNotEmpty(listJsonArray)){
+                        for (Object tmp : listJsonArray) {
+                            JSONObject categoryInfo=(JSONObject)tmp;
+                            categoryInfo.put("rid",restaurantId);
+                            categoryInfo.put("cid",categoryId);
+                        }
+                    }
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return content;
+        return listJsonArray;
     }
 
     public String editSingleDish(String token,String restaurantId,String categoryId,String dishId,JSONObject singleDish){
@@ -148,19 +158,22 @@ public class DishService {
         return new ReturnBean(true,"");
     }
 
-    public ReturnBean mergeDishes(String token,String restaurantId,String categoryId,JSONArray dishArray){
+    public ReturnBean mergeDishes(String token,JSONArray dishArray){
         if(CollectionUtils.isNotEmpty(dishArray)){
             for (Object tmp : dishArray) {
                 JSONObject dishJson=(JSONObject)tmp;
                 String dishId=dishJson.optString("did");
+                String restaurantId=dishJson.optString("rid");
+                String categoryId=dishJson.optString("cid");
                 if(StringUtils.isNotEmpty(dishId)){
                     //edit
+                    //need to clean
                     dishJson.remove("did");
+                    dishJson.remove("rid");
+                    dishJson.remove("cid");
                     editSingleDish(token, restaurantId, categoryId, dishId, dishJson);
                 }else{
                     //add
-                    dishJson.put("rid",restaurantId);
-                    dishJson.put("cid",categoryId);
                     addSingleDish(token, restaurantId, categoryId, dishJson);
                 }
             }

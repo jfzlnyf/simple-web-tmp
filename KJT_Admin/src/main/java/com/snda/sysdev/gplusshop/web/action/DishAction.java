@@ -1,5 +1,6 @@
 package com.snda.sysdev.gplusshop.web.action;
 
+import com.snda.sysdev.gplusshop.web.model.ReturnBean;
 import com.snda.sysdev.gplusshop.web.service.DishService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -31,10 +32,11 @@ public class DishAction {
     @ResponseBody
     public String getDishList(
             HttpSession session,
-            @RequestParam(value = "restaurantId") String restaurantId,
-            @RequestParam(value = "categoryId") String categoryId
+            @RequestParam(value = "restaurant") String restaurantId,
+            @RequestParam(value = "category") String categoryId
     ){
-            return dishService.getDishList(LoginAction.getToken(session),restaurantId,categoryId);
+        JSONArray retArray=dishService.getDishList(LoginAction.getToken(session),restaurantId,categoryId);
+        return JSONObject.fromObject(new ReturnBean(true,"success",retArray)).toString();
     }
 
 
@@ -42,8 +44,6 @@ public class DishAction {
     @ResponseBody
     public String editDishes(
             HttpSession session,
-            @RequestParam(value = "restaurantId") String restaurantId,
-            @RequestParam(value = "categoryId") String categoryId,
             @RequestBody String dishJson
 
     ){
@@ -56,7 +56,7 @@ public class DishAction {
             JSONObject editSingle=JSONObject.fromObject(dishJson);
             editArray.add(editSingle);
         }
-        return dishService.mergeDishes(LoginAction.getToken(session), restaurantId, categoryId,editArray).toString();
+        return dishService.mergeDishes(LoginAction.getToken(session), editArray).toString();
     }
 
 
