@@ -4,6 +4,7 @@
  * @date 13-11-17
  */
 var config = {
+    appFolder: '/static/app', //你改成 /static/app
     api: {
         category: {
             create: '/category/edit', //POST {"success":true}
@@ -12,9 +13,9 @@ var config = {
             destroy: '../api/category.php?action=destroy'
         },
         dish: {
-            create: '../api/dish.php?action=create',
-            read: '../api/dish.php?action=read',
-            update: '../api/dish.php?action=update',
+            create: '/dish/edit',
+            read: '/dish/list',
+            update: '/dish/edit',
             destroy: '../api/dish.php?action=destroy'
         },
         restaurant: {

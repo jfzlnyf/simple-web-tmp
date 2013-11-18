@@ -5,7 +5,7 @@
  */
 Ext.application({
     name: 'Admin',
-    appFolder: 'app',
+    appFolder: config.appFolder,
     controllers: [
         'Menu', 'Category', 'Dish', 'Restaurant'
     ],
@@ -14,6 +14,11 @@ Ext.application({
 
         Ext.create('Ext.container.Viewport', {
             layout: 'border',
+            listeners: {
+                render: function () {
+                    console.log('render');
+                }
+            },
             items: [
                 {
                     xtype: 'container',
@@ -31,13 +36,16 @@ Ext.application({
                     layout: 'fit',
                     items: [
                         {
-                            xtype: 'category'
+                            xtype: 'category',
+                            hidden: !/category/.test(document.location.hash)
                         },
                         {
-                            xtype: 'dish'
+                            xtype: 'dish',
+                            hidden: !/dish/.test(document.location.hash)
                         },
                         {
-                            xtype: 'restaurant'
+                            xtype: 'restaurant',
+                            hidden: !/restaurant/.test(document.location.hash)
                         }
                     ]
                 }

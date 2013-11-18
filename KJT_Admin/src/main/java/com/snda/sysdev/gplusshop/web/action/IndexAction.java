@@ -26,14 +26,12 @@ public class IndexAction {
 
 
 
-    @RequestMapping(value = "/")
-    @ResponseBody
+    @RequestMapping(value = "/index")
     public String index(
             HttpSession session,
-            HttpServletRequest request,
-            @RequestParam(value = "openId",required = false)String openId
+            HttpServletRequest request
     ) {
-        return "hello,"+openId;
+        return "index";
     }
 
 

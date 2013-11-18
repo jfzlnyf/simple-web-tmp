@@ -62,9 +62,7 @@ Ext.define('Admin.view.Category' ,{
                 editable: false,
                 store: ['normal', 'normal1', 'normal2'],
                 name: 'categoryType',
-                queryMode: 'local',
-                valueField: 'value',
-                displayField: 'display'
+                queryMode: 'local'
             }
         },
         { text: 'priority', dataIndex: 'priority', editor: 'textfield' },

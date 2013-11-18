@@ -24,6 +24,11 @@ Ext.define('Admin.controller.Restaurant', {
                 click: this.onNew
             }
         });
+        this.control({
+            'restaurant': {
+                render: this.onRestaurantRender
+            }
+        });
     },
     onSave: function () {
         console.log('save');
@@ -33,5 +38,8 @@ Ext.define('Admin.controller.Restaurant', {
         console.log('new');
         this.getRestaurantStore().add(Ext.create('Admin.model.Restaurant'));
 //        this.getRestaurantStore().sync();
+    },
+    onRestaurantRender: function () {
+        console.log('Restaurant was rendered');
     }
 });
