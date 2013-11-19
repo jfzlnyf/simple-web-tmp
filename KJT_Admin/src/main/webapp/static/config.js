@@ -21,7 +21,7 @@ var config = {
         restaurant: {
             create: '../api/restaurant.php?action=create',
             read: '/restaurant/list',
-            update: '../api/restaurant.php?action=update',
+            update: '/restaurant/edit',
             destroy: '../api/restaurant.php?action=destroy'
         }
     }
