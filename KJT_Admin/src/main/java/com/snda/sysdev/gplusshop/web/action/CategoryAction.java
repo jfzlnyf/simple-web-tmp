@@ -2,6 +2,7 @@ package com.snda.sysdev.gplusshop.web.action;
 
 import com.snda.sysdev.gplusshop.web.model.ReturnBean;
 import com.snda.sysdev.gplusshop.web.service.CategoryService;
+import com.snda.sysdev.gplusshop.web.service.LoginService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -26,6 +27,9 @@ import java.util.List;
 public class CategoryAction {
 
     @Resource
+    LoginService loginService;
+
+    @Resource
     CategoryService categoryService;
 
     @RequestMapping(value = "/list")
@@ -34,7 +38,7 @@ public class CategoryAction {
             HttpSession session,
             @RequestParam(value = "restaurant") String restaurantId
     ){
-        JSONArray  retArray=categoryService.getCategoryList(LoginAction.getToken(session),restaurantId);
+        JSONArray  retArray=categoryService.getCategoryList(loginService.getToken(session),restaurantId);
         return JSONObject.fromObject(new ReturnBean(true,"success",retArray)).toString();
     }
 
@@ -57,7 +61,7 @@ public class CategoryAction {
             JSONObject editSingle=JSONObject.fromObject(categoryJson);
             editArray.add(editSingle);
         }
-        return categoryService.mergeCategories(LoginAction.getToken(session), editArray).toString();
+        return categoryService.mergeCategories(loginService.getToken(session), editArray).toString();
     }
 
 
@@ -71,7 +75,7 @@ public class CategoryAction {
             @RequestParam(value = "categoryIds") List<String> categoryIds
 
     ){
-        return categoryService.deleteCategories(LoginAction.getToken(session), restaurantId, categoryIds).toString();
+        return categoryService.deleteCategories(loginService.getToken(session), restaurantId, categoryIds).toString();
     }
 
 

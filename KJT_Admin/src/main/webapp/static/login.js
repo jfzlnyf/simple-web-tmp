@@ -11,6 +11,8 @@ Ext.application({
 
         Ext.create('Ext.window.Window', {
             title: 'Please login',
+            width:300,
+            height:150,
             items: [
                 {
                     xtype: 'form',

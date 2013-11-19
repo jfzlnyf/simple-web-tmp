@@ -5,7 +5,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -58,18 +57,6 @@ public class LoginAction {
 
 
 
-    public static boolean checkLogin(HttpSession session){
-        if(session.getAttribute("token")!=null){
-           return true;
-        }
-        return false;
-    }
 
-    public static String getToken(HttpSession session){
-        if(checkLogin(session)){
-            return session.getAttribute("token")+"";
-        }
-        return null;
-    }
 
 }

@@ -1,6 +1,7 @@
 package com.snda.sysdev.gplusshop.web.action;
 
 import com.snda.sysdev.gplusshop.web.model.ReturnBean;
+import com.snda.sysdev.gplusshop.web.service.LoginService;
 import com.snda.sysdev.gplusshop.web.service.RestaurantService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -22,6 +23,10 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class RestaurantAction {
 
+
+    @Resource
+    LoginService loginService;
+
     @Resource
     RestaurantService restaurantService;
 
@@ -30,7 +35,7 @@ public class RestaurantAction {
     public String getRestaurantList(
             HttpSession session
     ){
-        JSONArray  retArray=restaurantService.getRestaurantList(LoginAction.getToken(session));
+        JSONArray  retArray=restaurantService.getRestaurantList(loginService.getToken(session));
         return JSONObject.fromObject(new ReturnBean(true,"success",retArray)).toString();
     }
 

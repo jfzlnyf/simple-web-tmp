@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,6 +49,7 @@ public class LoginService {
                     session.setAttribute("token",token);
                     session.setAttribute("password",password);
                     session.setAttribute("username",username);
+                    session.setAttribute("updateTime",new Date());
                 }
             }
         } catch (IOException e) {
@@ -55,4 +57,35 @@ public class LoginService {
         }
         return token;
     }
+
+
+    public String getToken(HttpSession session){
+        try {
+            if(checkLogin(session)){
+                String token=null;
+                //already login
+                Date updateTime=(Date)session.getAttribute("updateTime");
+                if((System.currentTimeMillis()-updateTime.getTime())/1000>120){
+                   //login again to refresh token
+                    token=doLogin(session.getAttribute("username")+"",session.getAttribute("password")+"",session);
+                    System.out.println("token refreshed");
+                }else{
+                    token=session.getAttribute("token")+"";
+                }
+                return token;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return null;
+    }
+
+
+    public static boolean checkLogin(HttpSession session){
+        if(session.getAttribute("token")!=null){
+           return true;
+        }
+        return false;
+    }
+
 }

@@ -2,6 +2,7 @@ package com.snda.sysdev.gplusshop.web.action;
 
 import com.snda.sysdev.gplusshop.web.model.ReturnBean;
 import com.snda.sysdev.gplusshop.web.service.DishService;
+import com.snda.sysdev.gplusshop.web.service.LoginService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
@@ -25,6 +26,10 @@ import java.util.List;
 @Controller
 public class DishAction {
 
+
+    @Resource
+    LoginService loginService;
+
     @Resource
     DishService dishService;
 
@@ -35,7 +40,7 @@ public class DishAction {
             @RequestParam(value = "restaurant") String restaurantId,
             @RequestParam(value = "category") String categoryId
     ){
-        JSONArray retArray=dishService.getDishList(LoginAction.getToken(session),restaurantId,categoryId);
+        JSONArray retArray=dishService.getDishList(loginService.getToken(session),restaurantId,categoryId);
         return JSONObject.fromObject(new ReturnBean(true,"success",retArray)).toString();
     }
 
@@ -56,7 +61,7 @@ public class DishAction {
             JSONObject editSingle=JSONObject.fromObject(dishJson);
             editArray.add(editSingle);
         }
-        return dishService.mergeDishes(LoginAction.getToken(session), editArray).toString();
+        return dishService.mergeDishes(loginService.getToken(session), editArray).toString();
     }
 
 
@@ -69,7 +74,7 @@ public class DishAction {
             @RequestParam(value = "dishIds") List<String> dishIds
 
     ){
-        return dishService.deleteDishes(LoginAction.getToken(session), restaurantId, categoryId,dishIds).toString();
+        return dishService.deleteDishes(loginService.getToken(session), restaurantId, categoryId,dishIds).toString();
     }
 
 
