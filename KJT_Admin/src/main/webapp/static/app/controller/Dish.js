@@ -45,7 +45,10 @@ Ext.define('Admin.controller.Dish', {
         this.getDishStore().sync();
     },
     onNew: function () {
-        this.getDishStore().add({});
+        this.getDishStore().add({
+            rid: this.currentRestaurantId,
+            cid: this.currentCategoryId
+        });
     },
     onReset: function () {
         this.getDishStore().rejectChanges();

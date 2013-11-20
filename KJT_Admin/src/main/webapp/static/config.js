@@ -10,13 +10,13 @@ var config = {
             create: '/category/edit', //POST {"success":true}
             read: '/category/list', //GET {"success":true,"data":[]}
             update: '/category/edit', //POST {"success":true}
-            destroy: '../api/category.php?action=destroy'
+            destroy: '/category/delete'
         },
         dish: {
             create: '/dish/edit',
             read: '/dish/list',
             update: '/dish/edit',
-            destroy: '../api/dish.php?action=destroy'
+            destroy: '/dish/delete'
         },
         restaurant: {
             create: '../api/restaurant.php?action=create',
