@@ -36,12 +36,17 @@ Ext.define('Admin.view.Category' ,{
                 {
                     text: 'Reset',
                     action: 'reset'
+                },
+                {
+                    text: 'Delete',
+                    action: 'delete'
                 }
             ]
         }
     ],
     store: 'Category',
-    selType: 'cellmodel',
+//    selType: 'cellmodel',
+    selType: 'checkboxmodel',
     plugins: [
         Ext.create('Ext.grid.plugin.CellEditing', {
             clicksToEdit: 2

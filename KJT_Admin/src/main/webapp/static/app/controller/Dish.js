@@ -32,6 +32,9 @@ Ext.define('Admin.controller.Dish', {
             'dish button[action=reset]': {
                 click: this.onReset
             },
+            'dish button[action=delete]': {
+                click: this.onDelete
+            },
             'dish textfield[action=search]': {
                 specialkey: this.onSearch
             }
@@ -74,5 +77,28 @@ Ext.define('Admin.controller.Dish', {
                 }
             });
         }
+    },
+    onDelete: function () {
+        var me = this;
+        var selection = Ext.ComponentQuery.query('dish')[0].getSelectionModel().getSelection();
+        var dArr = [];
+        Ext.each(selection, function (i) {
+            dArr.push(i.get('did'));
+        });
+        Ext.Ajax.request({
+            url: config.api.dish.destroy,
+            method: 'get',
+            params: {
+                dishIds: dArr.join(','),
+                restaurantId: this.currentRestaurantId,
+                categoryId: this.currentCategoryId
+            },
+            success: function (response) {
+                var result = Ext.JSON.decode(response.responseText);
+                if (result.success) {
+                    me.getDishStore().reload();
+                }
+            }
+        })
     }
 });

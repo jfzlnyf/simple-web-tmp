@@ -48,6 +48,10 @@ Ext.define('Admin.view.Dish' ,{
                     action: 'reset'
                 },
                 {
+                    text: 'Delete',
+                    action: 'delete'
+                },
+                {
                     xtype: 'textfield',
                     emptyText: 'Search',
                     action: 'search'
@@ -56,7 +60,7 @@ Ext.define('Admin.view.Dish' ,{
         }
     ],
     store: 'Dish',
-    selType: 'cellmodel',
+    selType: 'checkboxmodel',
     plugins: [
         Ext.create('Ext.grid.plugin.CellEditing', {
             clicksToEdit: 2

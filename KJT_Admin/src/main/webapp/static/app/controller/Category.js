@@ -28,6 +28,9 @@ Ext.define('Admin.controller.Category', {
             },
             'category button[action=reset]': {
                 click: this.onReset
+            },
+            'category button[action=delete]': {
+                click: this.onDelete
             }
         });
     },
@@ -49,5 +52,27 @@ Ext.define('Admin.controller.Category', {
     },
     onReset: function () {
         this.getCategoryStore().rejectChanges();
+    },
+    onDelete: function () {
+        var me = this;
+        var selection = Ext.ComponentQuery.query('category')[0].getSelectionModel().getSelection();
+        var cArr = [];
+        Ext.each(selection, function (i) {
+            cArr.push(i.get('cid'));
+        });
+        Ext.Ajax.request({
+            url: config.api.category.destroy,
+            method: 'get',
+            params: {
+                categoryIds: cArr.join(','),
+                restaurantId: this.currentRestaurantId
+            },
+            success: function (response) {
+                var result = Ext.JSON.decode(response.responseText);
+                if (result.success) {
+                    me.getCategoryStore().reload();
+                }
+            }
+        })
     }
 });
