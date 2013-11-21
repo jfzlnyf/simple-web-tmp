@@ -23,7 +23,8 @@ Ext.define('Admin.view.Dish' ,{
                     queryMode: 'local',
                     valueField: 'rid',
                     displayField: 'enName',
-                    action: 'restaurant'
+                    action: 'restaurant',
+                    width:200
                 },
                 {
                     xtype: 'combobox',
@@ -33,7 +34,8 @@ Ext.define('Admin.view.Dish' ,{
                     queryMode: 'local',
                     valueField: 'cid',
                     displayField: 'enName',
-                    action: 'category'
+                    action: 'category',
+                    width:200
                 },
                 {
                     text: 'New Dish',
@@ -80,22 +82,44 @@ Ext.define('Admin.view.Dish' ,{
             editor: {
                 xtype: 'combobox',
                 editable: false,
-                store: ['normal', 'normal1', 'normal2'],
+                store: ['normal', 'paused'],
                 name: 'status',
                 queryMode: 'local'
             }
         },
-        { text: 'manualPriority', dataIndex: 'manualPriority', editor: 'textfield' },
-        { text: 'manualPriority2', dataIndex: 'manualPriority2', editor: 'textfield' },
-        { text: 'autoPriority', dataIndex: 'autoPriority', editor: 'textfield' },
-        { text: 'autoPriority2', dataIndex: 'autoPriority2', editor: 'textfield' },
-        { text: 'subgroup', dataIndex: 'subgroup', editor: 'textfield' },
-        { text: 'size1', dataIndex: 'size1', editor: 'textfield' },
-        { text: 'size2', dataIndex: 'size2', editor: 'textfield' },
-        { text: 'size3', dataIndex: 'size3', editor: 'textfield' },
-        { text: 'size4', dataIndex: 'size4', editor: 'textfield' },
-        { text: 'lunchSpecial', dataIndex: 'lunchSpecial', editor: 'textfield' },
-        { text: 'dinnerSpecial', dataIndex: 'dinnerSpecial', editor: 'textfield' },
-        { text: 'printerMask', dataIndex: 'printerMask', editor: 'textfield' }
+        { text: 'manualPriority', dataIndex: 'manualPriority', editor: 'numberfield' },
+        { text: 'manualPriority2', dataIndex: 'manualPriority2', editor: 'numberfield' },
+        { text: 'autoPriority', dataIndex: 'autoPriority', editor: 'numberfield' },
+        { text: 'autoPriority2', dataIndex: 'autoPriority2', editor: 'numberfield' },
+        { text: 'subgroup', dataIndex: 'subgroup', editor: 'numberfield' },
+        { text: 'size1', dataIndex: 'size1', editor: 'numberfield' },
+        { text: 'size2', dataIndex: 'size2', editor: 'numberfield' },
+        { text: 'size3', dataIndex: 'size3', editor: 'numberfield' },
+        { text: 'size4', dataIndex: 'size4', editor: 'numberfield' },
+        { text: 'lunchSpecial', dataIndex: 'lunchSpecial', editor: 'numberfield' },
+        { text: 'dinnerSpecial', dataIndex: 'dinnerSpecial', editor: 'numberfield' },
+        {
+            text: 'printerMask',
+            dataIndex: 'printerMask',
+            width:200,
+            editor: {
+                xtype: 'combobox',
+                editable: false,
+                valueField: 'value',
+                nameField:'name',
+                store:[
+                    [1,"Front Desk Only"],
+                    [2,"Fryer Printer Only"],
+                    [3,"Front Desk and Fryer Printer"],
+                    [4,"Kitchen Printer Only"],
+                    [5,"Front Desk and Kitchen Printer"],
+                    [6,"Fryer Printer and Kitchen Printer"],
+                    [7,"All Printers"]
+
+                ],
+                name: 'status',
+                queryMode: 'local'
+            }
+        }
     ]
 });

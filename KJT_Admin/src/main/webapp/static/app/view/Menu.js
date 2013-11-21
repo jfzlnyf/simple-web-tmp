@@ -3,7 +3,7 @@
  * @author ishowshao
  * @date 13-11-15
  */
-Ext.define('Admin.view.Menu' ,{
+Ext.define('Admin.view.Menu', {
     extend: 'Ext.tree.Panel',
     alias: 'widget.Admin-menu',
 
@@ -21,9 +21,9 @@ Ext.define('Admin.view.Menu' ,{
             root: {
                 expanded: true,
                 children: [
-                    { text: "restaurant", leaf: true, id: 'restaurant' },
-                    { text: "dish", leaf: true, id: 'dish' },
-                    { text: "category", leaf: true, id: 'category' }
+                    { text: "Restaurant", leaf: true, id: 'restaurant' },
+                    { text: "Category", leaf: true, id: 'category' },
+                    { text: "Dish", leaf: true, id: 'dish' }
                 ]
             }
         });

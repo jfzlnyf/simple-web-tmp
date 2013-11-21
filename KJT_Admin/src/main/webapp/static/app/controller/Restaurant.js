@@ -6,7 +6,7 @@
 Ext.define('Admin.controller.Restaurant', {
     extend: 'Ext.app.Controller',
     views: [
-        'Restaurant'
+        'Restaurant', 'CloneRestaurant'
     ],
     stores: [
         'Restaurant'
@@ -20,8 +20,8 @@ Ext.define('Admin.controller.Restaurant', {
             'restaurant button[action=save]': {
                 click: this.onSave
             },
-            'restaurant button[action=new]': {
-                click: this.onNew
+            'restaurant button[action=clone]': {
+                click: this.onClone
             }
         });
         this.control({
@@ -34,10 +34,8 @@ Ext.define('Admin.controller.Restaurant', {
         console.log('save');
         this.getRestaurantStore().sync();
     },
-    onNew: function () {
-        console.log('new');
-        this.getRestaurantStore().add(Ext.create('Admin.model.Restaurant'));
-//        this.getRestaurantStore().sync();
+    onClone: function () {
+        Ext.create(this.getCloneRestaurantView()).show();
     },
     onRestaurantRender: function () {
         console.log('Restaurant was rendered');

@@ -21,6 +21,7 @@ Ext.define('Admin.view.Category' ,{
                     store: 'Restaurant',
                     name: 'restaurant',
                     queryMode: 'local',
+                    width:200,
                     valueField: 'rid',
                     displayField: 'enName',
                     action: 'restaurant'
@@ -56,16 +57,16 @@ Ext.define('Admin.view.Category' ,{
 //        { text: 'rowid', dataIndex: 'rowid' },
 //        { text: 'cid', dataIndex: 'cid', editor: 'textfield' },
 //        { text: 'rid', dataIndex: 'rid', editor: 'textfield' },
-        { text: 'enName', dataIndex: 'enName', editor: 'textfield' },
-        { text: 'cnName', dataIndex: 'cnName', editor: 'textfield' },
-        { text: 'exName', dataIndex: 'exName', editor: 'textfield' },
+        { text: 'enName', dataIndex: 'enName', editor: 'textfield',width:200  },
+        { text: 'cnName', dataIndex: 'cnName', editor: 'textfield' ,width:200 },
+        { text: 'exName', dataIndex: 'exName', editor: 'textfield',width:200  },
         {
             text: 'categoryType',
             dataIndex: 'categoryType',
             editor: {
                 xtype: 'combobox',
                 editable: false,
-                store: ['normal', 'normal1', 'normal2'],
+                store: ['normal', 'riceRegular', 'riceComboApp', 'sideRegular', 'matrixMenu', 'comboApp'],
                 name: 'categoryType',
                 queryMode: 'local'
             }
@@ -73,6 +74,25 @@ Ext.define('Admin.view.Category' ,{
         { text: 'priority', dataIndex: 'priority', editor: 'textfield' },
         { text: 'priority2', dataIndex: 'priority2', editor: 'textfield' },
 //        { text: 'extension', dataIndex: 'extension' },
-        { text: 'defaultPrinterMask', dataIndex: 'defaultPrinterMask', editor: 'textfield' }
+        { text: 'defaultPrinterMask', dataIndex: 'defaultPrinterMask',width:150 ,
+            editor: {
+                xtype: 'combobox',
+                editable: false,
+                valueField: 'value',
+                nameField:'name',
+                store:[
+                    [1,"Front Desk Only"],
+                    [2,"Fryer Printer Only"],
+                    [3,"Front Desk and Fryer Printer"],
+                    [4,"Kitchen Printer Only"],
+                    [5,"Front Desk and Kitchen Printer"],
+                    [6,"Fryer Printer and Kitchen Printer"],
+                    [7,"All Printers"]
+
+                ],
+                name: 'status',
+                queryMode: 'local'
+            }
+        }
     ]
 });
