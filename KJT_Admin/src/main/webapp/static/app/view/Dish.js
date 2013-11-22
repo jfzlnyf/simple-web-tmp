@@ -3,7 +3,7 @@
  * @author ishowshao
  * @date 13-11-16
  */
-Ext.define('Admin.view.Dish' ,{
+Ext.define('Admin.view.Dish', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.dish',
     hidden: true,
@@ -24,7 +24,7 @@ Ext.define('Admin.view.Dish' ,{
                     valueField: 'rid',
                     displayField: 'enName',
                     action: 'restaurant',
-                    width:200
+                    width: 200
                 },
                 {
                     xtype: 'combobox',
@@ -35,7 +35,7 @@ Ext.define('Admin.view.Dish' ,{
                     valueField: 'cid',
                     displayField: 'enName',
                     action: 'category',
-                    width:200
+                    width: 200
                 },
                 {
                     text: 'New Dish',
@@ -52,12 +52,13 @@ Ext.define('Admin.view.Dish' ,{
                 {
                     text: 'Delete',
                     action: 'delete'
-                },
-                {
-                    xtype: 'textfield',
-                    emptyText: 'Search',
-                    action: 'search'
                 }
+//                    ,
+//                {
+//                    xtype: 'textfield',
+//                    emptyText: 'Search',
+//                    action: 'search'
+//                }
             ]
         }
     ],
@@ -101,22 +102,16 @@ Ext.define('Admin.view.Dish' ,{
         {
             text: 'printerMask',
             dataIndex: 'printerMask',
-            width:200,
+            width: 200,
+            renderer: function (value) {
+                return Ext.data.StoreManager.lookup('PrinterMask').findRecord('id', value).get('name');
+            },
             editor: {
                 xtype: 'combobox',
                 editable: false,
-                valueField: 'value',
-                nameField:'name',
-                store:[
-                    [1,"Front Desk Only"],
-                    [2,"Fryer Printer Only"],
-                    [3,"Front Desk and Fryer Printer"],
-                    [4,"Kitchen Printer Only"],
-                    [5,"Front Desk and Kitchen Printer"],
-                    [6,"Fryer Printer and Kitchen Printer"],
-                    [7,"All Printers"]
-
-                ],
+                valueField: 'id',
+                displayField: 'name',
+                store: 'PrinterMask',
                 name: 'status',
                 queryMode: 'local'
             }

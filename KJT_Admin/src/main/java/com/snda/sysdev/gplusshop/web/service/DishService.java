@@ -56,7 +56,7 @@ public class DishService {
             if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
                 BufferedReader in = null;
                 in = new BufferedReader(new InputStreamReader(response2.getEntity()
-                        .getContent()));
+                        .getContent(),"UTF-8"));
                 StringBuffer sb = new StringBuffer("");
                 String line;
                 String NL = System.getProperty("line.separator");
@@ -108,6 +108,7 @@ public class DishService {
                 }
                 in.close();
                 content = sb.toString();
+                System.out.println(content);
             }
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -165,7 +166,7 @@ public class DishService {
                 String dishId=dishJson.optString("did");
                 String restaurantId=dishJson.optString("rid");
                 String categoryId=dishJson.optString("cid");
-                if(StringUtils.isNotEmpty(dishId)){
+                if(StringUtils.isNotEmpty(dishId) && !dishId.equals("null")){
                     //edit
                     //need to clean
                     dishJson.remove("did");

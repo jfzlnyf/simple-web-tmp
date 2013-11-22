@@ -54,8 +54,7 @@ public class CategoryService {
             HttpResponse listResponse = httpclient.execute(listRequest);
             if(listResponse.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
                 BufferedReader in = null;
-                in = new BufferedReader(new InputStreamReader(listResponse.getEntity()
-                        .getContent()));
+                in = new BufferedReader(new InputStreamReader(listResponse.getEntity().getContent(),"UTF-8"));
                 StringBuffer sb = new StringBuffer("");
                 String line;
                 String NL = System.getProperty("line.separator");
@@ -152,7 +151,7 @@ public class CategoryService {
                 String restaurantId=categoryJson.optString("rid");
                 //clean cid from frontend
                 categoryJson.remove("cid");
-                if(StringUtils.isNotEmpty(categoryId)){
+                if(StringUtils.isNotEmpty(categoryId) && !categoryId.equals("null")){
                     //edit
                     //need to clean
                     categoryJson.remove("rid");
@@ -206,11 +205,11 @@ public class CategoryService {
                 }
                 in.close();
                 content = sb.toString();
+                System.out.println(content);
             }
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        System.out.println(content);
         return content;
     }
 

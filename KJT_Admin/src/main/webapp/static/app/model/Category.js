@@ -14,6 +14,6 @@ Ext.define('Admin.model.Category', {
         { name: 'categoryType', type: 'string', defaultValue: 'normal' },
         { name: 'priority', defaultValue: null },
         { name: 'priority2', defaultValue: null },
-        { name: 'defaultPrinterMask', defaultValue: null }
+        { name: 'defaultPrinterMask', defaultValue: 1 }
     ]
 });

@@ -57,7 +57,7 @@ Ext.define('Admin.view.Restaurant' ,{
         { text: 'dishTax', dataIndex: 'dishTax', editor: 'numberfield' },
         { text: 'deliverTax', dataIndex: 'deliverTax', editor: 'numberfield' },
         { text: 'deliveryFee', dataIndex: 'deliveryFee', editor: 'numberfield' },
-        { text: 'minimumDelivery', dataIndex: 'minimumDelivery', editor: 'textfield' },
+        { text: 'minimumDelivery', dataIndex: 'minimumDelivery', editor: 'numberfield' },
         { text: 'forwardedPhone', dataIndex: 'forwardedPhone', editor: 'textfield' },
         { text: 'contactPhone1', dataIndex: 'contactPhone1', editor: 'textfield' },
         { text: 'contactPhone2', dataIndex: 'contactPhone2', editor: 'textfield' },

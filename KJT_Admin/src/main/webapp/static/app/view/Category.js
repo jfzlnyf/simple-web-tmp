@@ -3,7 +3,7 @@
  * @author ishowshao
  * @date 13-11-16
  */
-Ext.define('Admin.view.Category' ,{
+Ext.define('Admin.view.Category', {
     extend: 'Ext.grid.Panel',
     alias: 'widget.category',
     hidden: true,
@@ -21,7 +21,7 @@ Ext.define('Admin.view.Category' ,{
                     store: 'Restaurant',
                     name: 'restaurant',
                     queryMode: 'local',
-                    width:200,
+                    width: 200,
                     valueField: 'rid',
                     displayField: 'enName',
                     action: 'restaurant'
@@ -54,12 +54,9 @@ Ext.define('Admin.view.Category' ,{
         })
     ],
     columns: [
-//        { text: 'rowid', dataIndex: 'rowid' },
-//        { text: 'cid', dataIndex: 'cid', editor: 'textfield' },
-//        { text: 'rid', dataIndex: 'rid', editor: 'textfield' },
-        { text: 'enName', dataIndex: 'enName', editor: 'textfield',width:200  },
-        { text: 'cnName', dataIndex: 'cnName', editor: 'textfield' ,width:200 },
-        { text: 'exName', dataIndex: 'exName', editor: 'textfield',width:200  },
+        { text: 'enName', dataIndex: 'enName', editor: 'textfield', width: 200  },
+        { text: 'cnName', dataIndex: 'cnName', editor: 'textfield', width: 200 },
+        { text: 'exName', dataIndex: 'exName', editor: 'textfield', width: 200  },
         {
             text: 'categoryType',
             dataIndex: 'categoryType',
@@ -73,23 +70,16 @@ Ext.define('Admin.view.Category' ,{
         },
         { text: 'priority', dataIndex: 'priority', editor: 'textfield' },
         { text: 'priority2', dataIndex: 'priority2', editor: 'textfield' },
-//        { text: 'extension', dataIndex: 'extension' },
-        { text: 'defaultPrinterMask', dataIndex: 'defaultPrinterMask',width:150 ,
+        { text: 'defaultPrinterMask', dataIndex: 'defaultPrinterMask', width: 150,
+            renderer: function (value) {
+                return Ext.data.StoreManager.lookup('PrinterMask').findRecord('id', value).get('name');
+            },
             editor: {
                 xtype: 'combobox',
                 editable: false,
-                valueField: 'value',
-                nameField:'name',
-                store:[
-                    [1,"Front Desk Only"],
-                    [2,"Fryer Printer Only"],
-                    [3,"Front Desk and Fryer Printer"],
-                    [4,"Kitchen Printer Only"],
-                    [5,"Front Desk and Kitchen Printer"],
-                    [6,"Fryer Printer and Kitchen Printer"],
-                    [7,"All Printers"]
-
-                ],
+                valueField: 'id',
+                displayField: 'name',
+                store: 'PrinterMask',
                 name: 'status',
                 queryMode: 'local'
             }

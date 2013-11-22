@@ -29,6 +29,6 @@ Ext.define('Admin.controller.Menu', {
             item.hide();
         });
         viewport.getComponent('center').getComponent(record.get('id')).show();
-        document.location.hash = '#!/' + record.get('id');
+//        document.location.hash = '#!/' + record.get('id');
     }
 });

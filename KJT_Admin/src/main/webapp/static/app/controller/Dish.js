@@ -10,7 +10,8 @@ Ext.define('Admin.controller.Dish', {
     ],
     stores: [
         'Dish',
-        'DishCategory'
+        'DishCategory',
+        'PrinterMask'
     ],
     models: [
         'Dish'

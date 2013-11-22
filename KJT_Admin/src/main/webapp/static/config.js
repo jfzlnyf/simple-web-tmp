@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created with JetBrains PhpStorm.
  * @author ishowshao
  * @date 13-11-17
@@ -23,6 +23,7 @@ var config = {
             read: '/restaurant/list',
             update: '/restaurant/edit',
             destroy: '../api/restaurant.php?action=destroy'
-        }
+        },
+	clone: '../api/dish.php'
     }
 };

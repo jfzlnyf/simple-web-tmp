@@ -22,6 +22,9 @@ Ext.define('Admin.controller.Restaurant', {
             },
             'restaurant button[action=clone]': {
                 click: this.onClone
+            },
+            'clone-restaurant button[action=clone]': {
+                click: this.doClone
             }
         });
         this.control({
@@ -35,9 +38,24 @@ Ext.define('Admin.controller.Restaurant', {
         this.getRestaurantStore().sync();
     },
     onClone: function () {
-        Ext.create(this.getCloneRestaurantView()).show();
+        this.cloneWindow = Ext.create(this.getCloneRestaurantView()).show();
     },
     onRestaurantRender: function () {
         console.log('Restaurant was rendered');
+    },
+    doClone: function () {
+        var me = this;
+        Ext.Ajax.request({
+            url: config.api.clone,
+            method: 'get',
+            params: {
+                sourceRestaurantId: this.cloneWindow.getComponent(0).getComponent(0).getValue(),
+                targetRestaurantId: this.cloneWindow.getComponent(0).getComponent(1).getValue()
+            },
+            success: function () {
+                me.cloneWindow.close();
+                me.getRestaurantStore().reload();
+            }
+        });
     }
 });

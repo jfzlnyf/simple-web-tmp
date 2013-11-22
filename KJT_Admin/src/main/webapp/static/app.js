@@ -37,15 +37,15 @@ Ext.application({
                     items: [
                         {
                             xtype: 'category',
-                            hidden: !/category/.test(document.location.hash)
+                            hidden: true
                         },
                         {
                             xtype: 'dish',
-                            hidden: !/dish/.test(document.location.hash)
+                            hidden: true
                         },
                         {
                             xtype: 'restaurant',
-                            hidden: !/restaurant/.test(document.location.hash)
+                            hidden: false
                         }
                     ]
                 }
