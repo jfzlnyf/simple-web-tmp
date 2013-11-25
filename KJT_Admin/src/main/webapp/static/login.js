@@ -7,7 +7,7 @@ Ext.application({
     name: 'Admin',
     appFolder: 'app',
     launch: function () {
-        console.log('Application launch');
+//        console.log('Application launch');
 
         Ext.create('Ext.window.Window', {
             title: 'Please login',

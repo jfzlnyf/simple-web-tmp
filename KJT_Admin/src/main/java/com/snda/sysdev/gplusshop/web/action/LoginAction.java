@@ -35,7 +35,7 @@ public class LoginAction {
            @RequestParam(value = "password") String password
     ) {
         String token=loginService.doLogin(username,password,session);
-        if(StringUtils.isNotEmpty(token)){
+        if(StringUtils.isNotEmpty(token) && !token.equals("null")){
             try {
                 response.sendRedirect("/index");
             } catch (IOException e) {

@@ -20,14 +20,5 @@
             >
     </cache>
 
-    <!--其他服务数据缓存-->
-    <cache name="dataCache"
-           maxElementsInMemory="10000"
-           eternal="false"
-           overflowToDisk="false"
-           timeToIdleSeconds="360"
-           timeToLiveSeconds="360"
-           memoryStoreEvictionPolicy="LFU"
-            >
-    </cache>
+
 </ehcache>

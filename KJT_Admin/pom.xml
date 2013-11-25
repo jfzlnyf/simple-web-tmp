@@ -193,7 +193,7 @@
 
     </dependencies>
     <build>
-        <finalName>gplus_shop_web</finalName>
+        <finalName>kjt</finalName>
         <plugins>
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>

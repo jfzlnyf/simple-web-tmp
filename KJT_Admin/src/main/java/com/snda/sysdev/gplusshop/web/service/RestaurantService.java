@@ -12,6 +12,8 @@ import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -71,6 +73,7 @@ public class RestaurantService {
             "comment"
     };
 
+    @Cacheable(value = "methodCache",key = "'getRestaurantList'")
     public JSONArray getRestaurantList(String token) {
         String content = null;
         JSONArray listJsonArray=new JSONArray();
@@ -78,6 +81,7 @@ public class RestaurantService {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpGet httpget2 = new HttpGet(listUrl);
             httpget2.addHeader("WSToken",token);
+            httpget2.addHeader("Connection", "close");
             HttpResponse response2 = httpclient.execute(httpget2);
             if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
                 BufferedReader in = null;
@@ -91,6 +95,7 @@ public class RestaurantService {
                 }
                 in.close();
                 content = sb.toString();
+                System.out.println(sb.toString());
             }
             JSONObject listJson=JSONObject.fromObject(content);
             if(listJson!=null){
@@ -118,6 +123,7 @@ public class RestaurantService {
             String url=infoUrl.replace("{restaurantId}",restaurantId);
             HttpGet httpget2 = new HttpGet(url);
             httpget2.addHeader("WSToken",token);
+            httpget2.addHeader("Connection", "close");
             HttpResponse response2 = httpclient.execute(httpget2);
             if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
                 BufferedReader in = null;
@@ -140,6 +146,7 @@ public class RestaurantService {
         return null;
     }
 
+    @CacheEvict(value = "methodCache",key = "'getRestaurantList'")
     public ReturnBean mergeRestaurants(String token, JSONArray editArray) {
         if(CollectionUtils.isNotEmpty(editArray)){
             for (Object tmp : editArray) {
@@ -182,12 +189,13 @@ public class RestaurantService {
             DefaultHttpClient httpclient = new DefaultHttpClient();
             String url=editUrl
                     .replace("{restaurantId}", restaurantId);
-            HttpPut httpget2 = new HttpPut(url);
-            httpget2.addHeader("WSToken",token);
-            httpget2.addHeader("Content-Type","application/json");
+            HttpPut httpPut = new HttpPut(url);
+            httpPut.addHeader("WSToken", token);
+            httpPut.addHeader("Content-Type", "application/json");
+            httpPut.addHeader("Connection", "close");
             StringEntity reqEntity = new StringEntity(restaurantJson.toString(),"UTF-8");
-            httpget2.setEntity(reqEntity);
-            HttpResponse response2 = httpclient.execute(httpget2);
+            httpPut.setEntity(reqEntity);
+            HttpResponse response2 = httpclient.execute(httpPut);
             //todo
             if(true){
 //            if(response2.getStatusLine().getStatusCode()==HttpStatus.SC_OK){

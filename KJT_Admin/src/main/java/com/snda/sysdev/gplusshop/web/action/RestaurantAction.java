@@ -36,8 +36,13 @@ public class RestaurantAction {
     public String getRestaurantList(
             HttpSession session
     ){
-        JSONArray  retArray=restaurantService.getRestaurantList(loginService.getToken(session));
-        return JSONObject.fromObject(new ReturnBean(true,"success",retArray)).toString();
+        try {
+            JSONArray  retArray=restaurantService.getRestaurantList(loginService.getToken(session));
+            return JSONObject.fromObject(new ReturnBean(true,"success",retArray)).toString();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return JSONObject.fromObject(new ReturnBean(false,"server error")).toString();
     }
 
     @RequestMapping(value = "/edit")
@@ -47,17 +52,22 @@ public class RestaurantAction {
             @RequestBody String restaurantJson
 
     ){
-        System.out.println(restaurantJson);
-        JSONArray editArray=new JSONArray();
-        if(restaurantJson.startsWith("[")){
-            //array
-            editArray=JSONArray.fromObject(restaurantJson);
-        }else if(restaurantJson.startsWith("{")){
-            //object
-            JSONObject editSingle=JSONObject.fromObject(restaurantJson);
-            editArray.add(editSingle);
+        try {
+            System.out.println(restaurantJson);
+            JSONArray editArray=new JSONArray();
+            if(restaurantJson.startsWith("[")){
+                //array
+                editArray=JSONArray.fromObject(restaurantJson);
+            }else if(restaurantJson.startsWith("{")){
+                //object
+                JSONObject editSingle=JSONObject.fromObject(restaurantJson);
+                editArray.add(editSingle);
+            }
+            return restaurantService.mergeRestaurants(loginService.getToken(session), editArray).toString();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return restaurantService.mergeRestaurants(loginService.getToken(session), editArray).toString();
+        return JSONObject.fromObject(new ReturnBean(false,"server error")).toString();
     }
 
 

@@ -43,6 +43,7 @@ public class DishService {
     @Value("${kjt.dish.delete}")
     String deleteUrl;
 
+
     public JSONArray getDishList(String token,String restaurantId,String categoryId){
         JSONArray listJsonArray=new JSONArray();
         try {
@@ -52,6 +53,7 @@ public class DishService {
                     .replace("{categoryId}",categoryId);
             HttpGet listRequest = new HttpGet(url);
             listRequest.addHeader("WSToken", token);
+            listRequest.addHeader("Connection", "close");
             HttpResponse response2 = httpclient.execute(listRequest);
             if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
                 BufferedReader in = null;
@@ -91,6 +93,7 @@ public class DishService {
                     .replace("{categoryId}", categoryId)
                     .replace("{dishId}", dishId);
             HttpPut editRequest = new HttpPut(url);
+            editRequest.addHeader("Connection", "close");
             editRequest.addHeader("WSToken", token);
             editRequest.addHeader("Content-Type", "application/json");
             StringEntity reqEntity = new StringEntity(singleDish.toString(),"UTF-8");
@@ -124,9 +127,10 @@ public class DishService {
                     .replace("{restaurantId}", restaurantId)
                     .replace("{categoryId}", categoryId)
                     .replace("{dishId}", dishId);
-            HttpDelete httpget2 = new HttpDelete(url);
-            httpget2.addHeader("WSToken",token);
-            HttpResponse response2 = httpclient.execute(httpget2);
+            HttpDelete deleteRequest = new HttpDelete(url);
+            deleteRequest.addHeader("WSToken", token);
+            deleteRequest.addHeader("Connection", "close");
+            HttpResponse response2 = httpclient.execute(deleteRequest);
             if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
                 BufferedReader in = null;
                 in = new BufferedReader(new InputStreamReader(response2.getEntity()
@@ -146,18 +150,6 @@ public class DishService {
         return content;
     }
 
-
-    public ReturnBean editDishes(String token,String restaurantId,String categoryId,JSONArray dishArray){
-        if(CollectionUtils.isNotEmpty(dishArray)){
-            for (Object tmp : dishArray) {
-                JSONObject dishJson=(JSONObject)tmp;
-                String dishId=dishJson.optString("dishId");
-                dishJson.remove("dishId");
-                editSingleDish(token, restaurantId, categoryId, dishId, dishJson);
-            }
-        }
-        return new ReturnBean(true,"");
-    }
 
     public ReturnBean mergeDishes(String token,JSONArray dishArray){
         if(CollectionUtils.isNotEmpty(dishArray)){
@@ -202,6 +194,7 @@ public class DishService {
             HttpPost addRequest = new HttpPost(url);
             addRequest.addHeader("WSToken", token);
             addRequest.addHeader("Content-Type", "application/json");
+            addRequest.addHeader("Connection", "close");
             JSONObject allInfo=new JSONObject();
             JSONArray list=new JSONArray();
             list.add(dishJson);

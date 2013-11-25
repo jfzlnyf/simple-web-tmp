@@ -32,10 +32,11 @@ public class LoginService {
 
     public String doLogin(String username, String password, HttpSession session) {
         String token=null;
+        DefaultHttpClient httpclient = new DefaultHttpClient();
         try {
-            DefaultHttpClient httpclient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(loginUrl);
             httpPost.getParams().setParameter("http.protocol.content-charset", "UTF-8");
+            httpPost.addHeader("Connection", "close");
             List<NameValuePair> nvps = new ArrayList<NameValuePair>();
             nvps.add(new BasicNameValuePair("username",username));
             nvps.add(new BasicNameValuePair("password",password));
@@ -51,7 +52,10 @@ public class LoginService {
                     session.setAttribute("username",username);
                     session.setAttribute("updateTime",new Date());
                 }
+            }else{
+                System.out.println("login failed,status code:"+response.getStatusLine().getStatusCode());
             }
+
         } catch (IOException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }

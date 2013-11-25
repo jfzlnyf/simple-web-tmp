@@ -54,14 +54,6 @@
             <value>methodCache</value>
         </property>
     </bean>
-    <bean id="dataCache" class="org.springframework.cache.ehcache.EhCacheFactoryBean">
-        <property name="cacheManager">
-            <ref local="cacheManagerFactory"/>
-        </property>
-        <property name="cacheName">
-            <value>dataCache</value>
-        </property>
-    </bean>
 
 
 

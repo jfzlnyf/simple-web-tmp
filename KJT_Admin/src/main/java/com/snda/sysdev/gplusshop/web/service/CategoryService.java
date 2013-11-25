@@ -63,6 +63,7 @@ public class CategoryService {
                 }
                 in.close();
                 JSONObject  ret=JSONObject.fromObject(sb.toString());
+                System.out.println(sb.toString());
                 if(ret.containsKey("categories")){
                     listJsonArray=ret.optJSONArray("categories");
                     if(CollectionUtils.isNotEmpty(listJsonArray)){

@@ -10,13 +10,13 @@ Ext.application({
         'Menu', 'Category', 'Dish', 'Restaurant'
     ],
     launch: function () {
-        console.log('Application launch');
+//        console.log('Application launch');
 
         Ext.create('Ext.container.Viewport', {
             layout: 'border',
             listeners: {
                 render: function () {
-                    console.log('render');
+//                    console.log('render');
                 }
             },
             items: [

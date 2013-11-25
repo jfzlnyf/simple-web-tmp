@@ -40,8 +40,13 @@ public class DishAction {
             @RequestParam(value = "restaurant") String restaurantId,
             @RequestParam(value = "category") String categoryId
     ){
-        JSONArray retArray=dishService.getDishList(loginService.getToken(session),restaurantId,categoryId);
-        return JSONObject.fromObject(new ReturnBean(true,"success",retArray)).toString();
+        try {
+            JSONArray retArray=dishService.getDishList(loginService.getToken(session),restaurantId,categoryId);
+            return JSONObject.fromObject(new ReturnBean(true,"success",retArray)).toString();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return JSONObject.fromObject(new ReturnBean(false,"server error")).toString();
     }
 
 
@@ -52,16 +57,21 @@ public class DishAction {
             @RequestBody String dishJson
 
     ){
-        JSONArray editArray=new JSONArray();
-        if(dishJson.startsWith("[")){
-            //array
-            editArray=JSONArray.fromObject(dishJson);
-        }else if(dishJson.startsWith("{")){
-            //object
-            JSONObject editSingle=JSONObject.fromObject(dishJson);
-            editArray.add(editSingle);
+        try {
+            JSONArray editArray=new JSONArray();
+            if(dishJson.startsWith("[")){
+                //array
+                editArray=JSONArray.fromObject(dishJson);
+            }else if(dishJson.startsWith("{")){
+                //object
+                JSONObject editSingle=JSONObject.fromObject(dishJson);
+                editArray.add(editSingle);
+            }
+            return dishService.mergeDishes(loginService.getToken(session), editArray).toString();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        return dishService.mergeDishes(loginService.getToken(session), editArray).toString();
+        return JSONObject.fromObject(new ReturnBean(false,"server error")).toString();
     }
 
 
@@ -74,7 +84,12 @@ public class DishAction {
             @RequestParam(value = "dishIds") List<String> dishIds
 
     ){
-        return dishService.deleteDishes(loginService.getToken(session), restaurantId, categoryId,dishIds).toString();
+        try {
+            return dishService.deleteDishes(loginService.getToken(session), restaurantId, categoryId,dishIds).toString();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return JSONObject.fromObject(new ReturnBean(false,"server error")).toString();
     }
 
 

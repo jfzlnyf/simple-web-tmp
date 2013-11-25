@@ -15,7 +15,7 @@ Ext.define('Admin.controller.Category', {
         'Category'
     ],
     init: function() {
-        console.log('Category controller initialized');
+//        console.log('Category controller initialized');
         this.control({
             'category button[action=save]': {
                 click: this.onSave

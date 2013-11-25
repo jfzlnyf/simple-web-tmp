@@ -15,7 +15,7 @@ Ext.define('Admin.controller.Restaurant', {
         'Restaurant'
     ],
     init: function() {
-        console.log('Restaurant controller initialized');
+//        console.log('Restaurant controller initialized');
         this.control({
             'restaurant button[action=save]': {
                 click: this.onSave
@@ -34,14 +34,14 @@ Ext.define('Admin.controller.Restaurant', {
         });
     },
     onSave: function () {
-        console.log('save');
+//        console.log('save');
         this.getRestaurantStore().sync();
     },
     onClone: function () {
         this.cloneWindow = Ext.create(this.getCloneRestaurantView()).show();
     },
     onRestaurantRender: function () {
-        console.log('Restaurant was rendered');
+//        console.log('Restaurant was rendered');
     },
     doClone: function () {
         var me = this;

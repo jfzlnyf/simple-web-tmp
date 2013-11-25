@@ -40,7 +40,7 @@ Ext.define('Admin.controller.Dish', {
                 specialkey: this.onSearch
             }
         });
-        console.log('Dish controller initialized');
+//        console.log('Dish controller initialized');
     },
     onSave: function () {
         this.getDishStore().sync();

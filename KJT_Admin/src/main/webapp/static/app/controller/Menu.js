@@ -11,7 +11,7 @@ Ext.define('Admin.controller.Menu', {
     ],
 
     init: function() {
-        console.log('Menu controller initialized');
+//        console.log('Menu controller initialized');
         this.control({
             'viewport > treepanel': {
                 render: this.onPanelRendered,
@@ -21,7 +21,7 @@ Ext.define('Admin.controller.Menu', {
     },
 
     onPanelRendered: function() {
-        console.log('Menu was rendered');
+//        console.log('Menu was rendered');
     },
     onItemClick: function (node, record) {
         var viewport = Ext.ComponentQuery.query('viewport')[0];
