@@ -23,6 +23,9 @@ Ext.define('Admin.controller.Restaurant', {
             'restaurant button[action=clone]': {
                 click: this.onClone
             },
+            'restaurant button[action=reset]': {
+                click: this.onReset
+            },
             'clone-restaurant button[action=clone]': {
                 click: this.doClone
             }
@@ -39,6 +42,9 @@ Ext.define('Admin.controller.Restaurant', {
     },
     onClone: function () {
         this.cloneWindow = Ext.create(this.getCloneRestaurantView()).show();
+    },
+    onReset: function () {
+        this.getRestaurantStore().rejectChanges();
     },
     onRestaurantRender: function () {
 //        console.log('Restaurant was rendered');

@@ -56,7 +56,6 @@ Ext.define('Admin.view.Category', {
     columns: [
         { text: 'enName', dataIndex: 'enName', editor: 'textfield', width: 200  },
         { text: 'cnName', dataIndex: 'cnName', editor: 'textfield', width: 200 },
-        { text: 'exName', dataIndex: 'exName', editor: 'textfield', width: 200  },
         {
             text: 'categoryType',
             dataIndex: 'categoryType',

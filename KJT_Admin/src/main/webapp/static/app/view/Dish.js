@@ -75,7 +75,6 @@ Ext.define('Admin.view.Dish', {
 //        { text: 'cid', dataIndex: 'cid' },
         { text: 'enName', dataIndex: 'enName', editor: 'textfield' },
         { text: 'cnName', dataIndex: 'cnName', editor: 'textfield' },
-        { text: 'exName', dataIndex: 'exName', editor: 'textfield' },
         { text: 'description', dataIndex: 'description', editor: 'textfield' },
         {
             text: 'status',
@@ -95,8 +94,6 @@ Ext.define('Admin.view.Dish', {
         { text: 'subgroup', dataIndex: 'subgroup', editor: 'numberfield' },
         { text: 'size1', dataIndex: 'size1', editor: 'numberfield' },
         { text: 'size2', dataIndex: 'size2', editor: 'numberfield' },
-        { text: 'size3', dataIndex: 'size3', editor: 'numberfield' },
-        { text: 'size4', dataIndex: 'size4', editor: 'numberfield' },
         { text: 'lunchSpecial', dataIndex: 'lunchSpecial', editor: 'numberfield' },
         { text: 'dinnerSpecial', dataIndex: 'dinnerSpecial', editor: 'numberfield' },
         {

@@ -71,6 +71,24 @@ public class RestaurantAction {
     }
 
 
+    @RequestMapping(value = "/clone")
+    @ResponseBody
+    public String editRestaurants(
+            HttpSession session,
+            @RequestBody String sourceRestaurantId,
+            @RequestBody String targetRestaurantId
+
+    ){
+        try {
+            System.out.println("clone restaurant,source id:"+sourceRestaurantId+",target id:"+targetRestaurantId);
+            return restaurantService.cloneRestaurant(loginService.getToken(session),sourceRestaurantId,targetRestaurantId ).toString();
+        } catch (Exception e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return JSONObject.fromObject(new ReturnBean(false,"server error")).toString();
+    }
+
+
 
 
 }

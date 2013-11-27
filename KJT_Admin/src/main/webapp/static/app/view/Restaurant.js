@@ -22,6 +22,9 @@ Ext.define('Admin.view.Restaurant' ,{
                 {
                     text: 'Save',
                     action: 'save'
+                },{
+                    text: 'Reset',
+                    action: 'reset'
                 }
             ]
         }

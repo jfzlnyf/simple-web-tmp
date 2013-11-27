@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -216,5 +217,47 @@ public class RestaurantService {
         }
         System.out.println(content);
         return content;
+    }
+
+    public ReturnBean cloneRestaurant(String token, String sourceRestaurantId, String targetRestaurantId) {
+        ReturnBean ret=new ReturnBean(false,"server error");
+        try {
+            DefaultHttpClient httpclient = new DefaultHttpClient();
+            String url=cloneUrl
+                    .replace("{sourceRestaurantId}", sourceRestaurantId)
+                    .replace("{targetRestaurantId}", targetRestaurantId);
+            HttpPost cloneRequest = new HttpPost(url);
+            cloneRequest.addHeader("Connection", "close");
+            cloneRequest.addHeader("WSToken", token);
+            cloneRequest.addHeader("Content-Type", "application/json");
+            HttpResponse response2 = httpclient.execute(cloneRequest);
+            if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+                BufferedReader in = null;
+                in = new BufferedReader(new InputStreamReader(response2.getEntity()
+                        .getContent()));
+                StringBuffer sb = new StringBuffer("");
+                String line;
+                String NL = System.getProperty("line.separator");
+                while ((line = in.readLine()) != null) {
+                    sb.append(line + NL);
+                }
+                in.close();
+                String content = sb.toString();
+                System.out.println(content);
+                if(StringUtils.isNotEmpty(content)){
+                    JSONObject json= null;
+                    try {
+                        json = JSONObject.fromObject(content);
+                        ret=new ReturnBean(true,"",json);
+                    } catch (Exception e) {
+                        e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                        ret=new ReturnBean(false,"clone error");
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        return ret;
     }
 }

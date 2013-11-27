@@ -19,7 +19,7 @@ var config = {
             destroy: '/dish/delete'
         },
         restaurant: {
-            create: '../api/restaurant.php?action=create',
+            create: '/restaurant/clone',
             read: '/restaurant/list',
             update: '/restaurant/edit',
             destroy: '../api/restaurant.php?action=destroy'
