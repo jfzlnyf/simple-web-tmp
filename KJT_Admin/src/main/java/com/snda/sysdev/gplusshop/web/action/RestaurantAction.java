@@ -8,6 +8,7 @@ import net.sf.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
@@ -75,8 +76,8 @@ public class RestaurantAction {
     @ResponseBody
     public String editRestaurants(
             HttpSession session,
-            @RequestBody String sourceRestaurantId,
-            @RequestBody String targetRestaurantId
+            @RequestParam(value = "sourceRestaurantId") String sourceRestaurantId,
+            @RequestParam(value = "targetRestaurantId") String targetRestaurantId
 
     ){
         try {

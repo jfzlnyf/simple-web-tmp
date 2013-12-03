@@ -231,7 +231,8 @@ public class RestaurantService {
             cloneRequest.addHeader("WSToken", token);
             cloneRequest.addHeader("Content-Type", "application/json");
             HttpResponse response2 = httpclient.execute(cloneRequest);
-            if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+//            if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+            if(true){
                 BufferedReader in = null;
                 in = new BufferedReader(new InputStreamReader(response2.getEntity()
                         .getContent()));

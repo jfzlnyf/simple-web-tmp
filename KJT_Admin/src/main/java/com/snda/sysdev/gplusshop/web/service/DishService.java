@@ -99,7 +99,8 @@ public class DishService {
             StringEntity reqEntity = new StringEntity(singleDish.toString(),"UTF-8");
             editRequest.setEntity(reqEntity);
             HttpResponse response2 = httpclient.execute(editRequest);
-            if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+//            if(response2.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+            if(true){
                 BufferedReader in = null;
                 in = new BufferedReader(new InputStreamReader(response2.getEntity()
                         .getContent()));

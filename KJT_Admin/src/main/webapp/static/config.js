@@ -24,6 +24,6 @@ var config = {
             update: '/restaurant/edit',
             destroy: '../api/restaurant.php?action=destroy'
         },
-	clone: '../api/dish.php'
+	clone: '/restaurant/clone'
     }
 };
